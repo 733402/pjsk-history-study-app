@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17132d">
+  <title>SEKAI Study Lab — Project SEKAI History</title>
+  <style>
+    /* =========================
+       SEKAI STUDY LAB — STYLES
+       ========================= */
+    :root {
+      --ink:#f8f7ff; --muted:#b9b6d5; --bg:#0d0b1b; --panel:#17132d;
+      --panel-2:#211b40; --line:rgba(255,255,255,.12); --pink:#ff71bf;
+      --cyan:#6ee7ff; --yellow:#ffd166; --purple:#9b87ff; --green:#86efac;
+      --shadow:0 18px 55px rgba(0,0,0,.28); --radius:24px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:
+      radial-gradient(circle at 10% 0%, rgba(155,135,255,.18), transparent 30rem),
+      radial-gradient(circle at 95% 10%, rgba(255,113,191,.14), transparent 26rem), var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height:1.6; }
+    button, input, select { font:inherit; }
+    button { cursor:pointer; }
+    a { color:inherit; }
+    .skip { position:absolute; left:-999px; top:8px; background:#fff; color:#111; padding:10px 14px; z-index:99; border-radius:10px; }
+    .skip:focus { left:8px; }
+    .shell { width:min(1180px, calc(100% - 32px)); margin:auto; }
+    header { position:sticky; top:0; z-index:20; backdrop-filter:blur(18px); background:rgba(13,11,27,.78); border-bottom:1px solid var(--line); }
+    .nav { min-height:72px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:900; letter-spacing:.02em; }
+    .brand-mark { width:40px; height:40px; display:grid; place-items:center; border-radius:13px; color:#17132d; background:linear-gradient(135deg,var(--cyan),var(--pink)); box-shadow:0 0 30px rgba(110,231,255,.25); }
+    nav { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+    nav a, .text-btn { color:var(--muted); text-decoration:none; padding:8px 12px; border-radius:10px; border:1px solid transparent; background:none; }
+    nav a:hover, nav a:focus-visible, .text-btn:hover, .text-btn:focus-visible { color:var(--ink); border-color:var(--line); background:rgba(255,255,255,.06); }
+    :focus-visible { outline:3px solid var(--yellow); outline-offset:3px; }
+    .hero { padding:74px 0 46px; position:relative; overflow:hidden; }
+    .hero-grid { display:grid; grid-template-columns:1.4fr .8fr; gap:28px; align-items:center; }
+    .eyebrow { color:var(--cyan); text-transform:uppercase; font-size:.78rem; letter-spacing:.17em; font-weight:900; }
+    h1 { font-size:clamp(2.5rem, 6vw, 5.5rem); line-height:.98; margin:12px 0 20px; letter-spacing:-.06em; max-width:850px; }
+    h1 span { background:linear-gradient(90deg,var(--cyan),var(--pink),var(--yellow)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    h2 { font-size:clamp(1.7rem,3vw,2.6rem); line-height:1.05; margin:0 0 10px; }
+    h3 { margin:0 0 7px; line-height:1.2; }
+    .lead { color:var(--muted); font-size:1.1rem; max-width:710px; }
+    .actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:26px; }
+    .btn { border:0; border-radius:13px; padding:12px 16px; color:#17132d; font-weight:900; background:linear-gradient(135deg,var(--cyan),#b6f6ff); box-shadow:0 8px 25px rgba(110,231,255,.16); }
+    .btn:hover { transform:translateY(-2px); filter:brightness(1.06); }
+    .btn.secondary { color:var(--ink); background:rgba(255,255,255,.08); border:1px solid var(--line); box-shadow:none; }
+    .orbit { min-height:330px; display:grid; place-items:center; position:relative; }
+    .orbit::before, .orbit::after { content:""; position:absolute; border:1px dashed rgba(255,255,255,.22); border-radius:50%; transform:rotate(-20deg); }
+    .orbit::before { width:310px; height:160px; }
+    .orbit::after { width:240px; height:300px; transform:rotate(55deg); }
+    .orb-core { width:155px; height:155px; border-radius:50%; display:grid; place-items:center; font-size:4rem; background:linear-gradient(145deg,#fff3a8,#ff71bf 55%,#8170ff); box-shadow:0 0 80px rgba(255,113,191,.34); animation:float 5s ease-in-out infinite; }
+    .spark { position:absolute; font-size:1.7rem; animation:pulse 2.2s infinite alternate; }
+    .spark.one { top:14%; left:17%; color:var(--yellow); } .spark.two { right:13%; top:20%; color:var(--cyan); animation-delay:.6s; } .spark.three { bottom:13%; left:12%; color:var(--pink); animation-delay:1s; }
+    @keyframes float { 50% { transform:translateY(-13px) rotate(4deg); } } @keyframes pulse { to { transform:scale(1.3) rotate(12deg); opacity:.55; } }
+    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:16px 0 60px; }
+    .stat, .panel, .card { background:linear-gradient(145deg,rgba(33,27,64,.92),rgba(23,19,45,.88)); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); }
+    .stat { padding:18px; } .stat strong { display:block; font-size:1.7rem; } .stat small { color:var(--muted); }
+    section { padding:48px 0; } .section-head { display:flex; align-items:end; justify-content:space-between; gap:20px; margin-bottom:22px; } .section-head p { color:var(--muted); margin:0; }
+    .toolbar { display:flex; flex-wrap:wrap; gap:10px; padding:14px; margin-bottom:20px; background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:16px; }
+    input, select { color:var(--ink); background:#110e24; border:1px solid var(--line); border-radius:11px; padding:10px 12px; min-height:44px; } input { flex:1 1 220px; } select { flex:0 1 210px; }
+    .timeline { position:relative; display:grid; gap:15px; } .timeline::before { content:""; position:absolute; left:21px; top:14px; bottom:14px; width:2px; background:linear-gradient(var(--cyan),var(--pink),var(--yellow)); opacity:.6; }
+    .milestone { position:relative; margin-left:44px; padding:20px 20px 20px 22px; } .milestone::before { content:""; position:absolute; width:14px; height:14px; border:4px solid var(--bg); background:var(--cyan); border-radius:50%; left:-31px; top:25px; box-shadow:0 0 0 3px var(--cyan); }
+    .milestone[data-type="story"]::before { background:var(--pink); box-shadow:0 0 0 3px var(--pink); } .milestone[data-type="feature"]::before { background:var(--yellow); box-shadow:0 0 0 3px var(--yellow); }
+    .milestone-top { display:flex; align-items:center; justify-content:space-between; gap:12px; } .date { color:var(--cyan); font-weight:900; } .tag { display:inline-flex; padding:4px 9px; border-radius:999px; background:rgba(255,255,255,.1); color:var(--muted); font-size:.78rem; }
+    .milestone p { color:var(--muted); margin:8px 0 14px; } .detail { display:none; color:#dedbf5; border-top:1px solid var(--line); padding-top:13px; } .milestone.open .detail { display:block; }
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; } .panel { padding:24px; } .panel p { color:var(--muted); }
+    .mode-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; } .tab { border:1px solid var(--line); background:rgba(255,255,255,.05); color:var(--muted); padding:10px 14px; border-radius:999px; } .tab.active { color:#17132d; background:var(--yellow); border-color:var(--yellow); font-weight:900; }
+    .flashcard { min-height:270px; perspective:1000px; margin:18px 0; } .flash-inner { width:100%; min-height:270px; position:relative; transform-style:preserve-3d; transition:transform .55s; } .flashcard.flipped .flash-inner { transform:rotateY(180deg); }
+    .flash-face { position:absolute; inset:0; backface-visibility:hidden; border-radius:20px; padding:30px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; background:linear-gradient(140deg,rgba(110,231,255,.16),rgba(255,113,191,.16)); border:1px solid var(--line); } .flash-face.back { transform:rotateY(180deg); background:linear-gradient(140deg,rgba(255,209,102,.16),rgba(155,135,255,.17)); }
+    .flash-face strong { font-size:clamp(1.35rem,3vw,2rem); max-width:600px; } .flash-face small { color:var(--muted); margin-top:15px; }
+    .flash-controls, .quiz-controls { display:flex; gap:9px; flex-wrap:wrap; } .progress { height:9px; background:rgba(255,255,255,.1); border-radius:20px; overflow:hidden; margin:12px 0; } .progress > span { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--cyan),var(--pink)); transition:width .3s; }
+    .quiz-question { font-size:1.25rem; font-weight:800; margin:22px 0; } .answers { display:grid; gap:10px; } .answer { text-align:left; color:var(--ink); background:rgba(255,255,255,.06); border:1px solid var(--line); padding:13px 15px; border-radius:12px; } .answer.correct { background:rgba(134,239,172,.18); border-color:var(--green); } .answer.wrong { background:rgba(255,113,191,.18); border-color:var(--pink); } .answer:disabled { cursor:default; }
+    .feedback { min-height:28px; color:var(--muted); margin:14px 0; } .feedback.good { color:var(--green); } .feedback.bad { color:#ff9fba; }
+    .concepts { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; } .concept { padding:18px; border-radius:18px; background:rgba(255,255,255,.055); border:1px solid var(--line); } .concept .emoji { font-size:2rem; } .concept p { font-size:.95rem; }
+    .notes { min-height:150px; width:100%; resize:vertical; color:var(--ink); background:#110e24; border:1px solid var(--line); border-radius:13px; padding:14px; }
+    .notice { border-left:4px solid var(--yellow); padding:13px 16px; color:var(--muted); background:rgba(255,209,102,.08); border-radius:0 12px 12px 0; }
+    footer { border-top:1px solid var(--line); margin-top:30px; padding:30px 0 50px; color:var(--muted); font-size:.9rem; } .footer-row { display:flex; justify-content:space-between; gap:15px; flex-wrap:wrap; }
+    .toast { position:fixed; right:18px; bottom:18px; z-index:50; background:#fff; color:#17132d; padding:12px 16px; border-radius:12px; box-shadow:var(--shadow); transform:translateY(150%); transition:.3s; } .toast.show { transform:none; }
+    .hidden { display:none !important; }
+    @media (max-width:800px) { .hero-grid,.grid-2 { grid-template-columns:1fr; } .orbit { min-height:250px; } .stats { grid-template-columns:repeat(2,1fr); } .concepts { grid-template-columns:1fr 1fr; } .section-head { display:block; } }
+    @media (max-width:520px) { .shell { width:min(100% - 22px,1180px); } nav { display:none; } .hero { padding-top:48px; } .stats,.concepts { grid-template-columns:1fr; } .milestone { margin-left:34px; } .timeline::before { left:16px; } .milestone::before { left:-25px; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms !important; transition-duration:.01ms !important; scroll-behavior:auto !important; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header><div class="shell nav"><div class="brand"><span class="brand-mark" aria-hidden="true">♪</span><span>SEKAI Study Lab</span></div><nav aria-label="Primary navigation"><a href="#timeline">Timeline</a><a href="#flashcards">Flashcards</a><a href="#quiz">Quiz</a><a href="#concepts">Concepts</a></nav></div></header>
+  <main id="main" class="shell">
+    <section class="hero"><div class="hero-grid"><div><div class="eyebrow">A fan-made history companion</div><h1>Learn the story behind <span>Project SEKAI</span>.</h1><p class="lead">A colorful, self-paced study dashboard for exploring the history, releases, story worlds, and ideas behind <em>Hatsune Miku: Colorful Stage!</em></p><div class="actions"><a class="btn" href="#timeline">Start the timeline</a><button class="btn secondary" id="dailyBtn">Give me a study prompt</button></div><p class="notice">Dates and descriptions are simplified for studying. The app is unofficial and does not replace in-game story text or official announcements.</p></div><div class="orbit" aria-label="Decorative music-themed illustration"><span class="spark one">✦</span><span class="spark two">✧</span><span class="spark three">★</span><div class="orb-core">🎵</div></div></div></section>
+    <section class="stats" aria-label="Study progress"><div class="stat"><strong id="timelineStat">0%</strong><small>timeline explored</small></div><div class="stat"><strong id="cardStat">0</strong><small>flashcards reviewed</small></div><div class="stat"><strong id="quizStat">0%</strong><small>best quiz score</small></div><div class="stat"><strong id="streakStat">1</strong><small>study streak</small></div></section>
+
+    <section id="timeline"><div class="section-head"><div><div class="eyebrow">01 / Explore</div><h2>A timeline of milestones</h2><p>Search, filter, and open a milestone to reveal its study note.</p></div></div><div class="toolbar"><label for="timelineSearch" class="hidden">Search timeline</label><input id="timelineSearch" type="search" placeholder="Search releases, stories, features…"><label for="timelineType" class="hidden">Filter timeline</label><select id="timelineType"><option value="all">All milestone types</option><option value="release">Release</option><option value="story">Story & world</option><option value="feature">Feature & anniversary</option></select><button class="btn secondary" id="timelineReset">Reset filters</button></div><div id="timelineList" class="timeline" aria-live="polite"></div><p id="timelineEmpty" class="notice hidden">No milestones match that search. Try a broader keyword.</p></section>
+
+    <section id="flashcards"><div class="section-head"><div><div class="eyebrow">02 / Remember</div><h2>Flashcard studio</h2><p>Flip cards, move at your own pace, and shuffle when you want a fresh route through the material.</p></div><div><span id="cardCounter" class="tag">Card 1 of 8</span></div></div><div class="panel"><div class="progress"><span id="cardProgress"></span></div><div id="flashcard" class="flashcard" tabindex="0" role="button" aria-label="Flashcard. Press Enter or Space to flip"><div class="flash-inner"><div class="flash-face front"><small>Prompt</small><strong id="cardFront">When did the Japanese version launch?</strong><small>Click or press Enter to flip</small></div><div class="flash-face back"><small>Answer</small><strong id="cardBack">September 30, 2020</strong><small id="cardHint">A foundational release milestone.</small></div></div></div><div class="flash-controls"><button class="btn" id="flipCard">Flip card</button><button class="btn secondary" id="prevCard">← Previous</button><button class="btn secondary" id="nextCard">Next →</button><button class="btn secondary" id="shuffleCards">Shuffle deck</button></div></div></section>
+
+    <section id="quiz"><div class="section-head"><div><div class="eyebrow">03 / Check yourself</div><h2>Quick quiz</h2><p>Answer a few questions, then review the explanation—not just the score.</p></div><span id="quizScore" class="tag">Score: 0 / 0</span></div><div class="panel"><div class="progress"><span id="quizProgress"></span></div><div id="quizArea"></div><div class="quiz-controls"><button class="btn secondary" id="nextQuestion" disabled>Next question</button><button class="btn secondary" id="resetQuiz">Restart quiz</button></div></div></section>
+
+    <section id="concepts"><div class="section-head"><div><div class="eyebrow">04 / Connect ideas</div><h2>Study concepts</h2><p>Use the filters to organize the big ideas before diving into individual stories.</p></div></div><div class="mode-tabs" role="tablist" aria-label="Concept filters"><button class="tab active" data-concept="all" role="tab">All</button><button class="tab" data-concept="unit" role="tab">Units</button><button class="tab" data-concept="world" role="tab">Worlds</button><button class="tab" data-concept="system" role="tab">Systems</button></div><div id="conceptGrid" class="concepts"></div></section>
+
+    <section><div class="grid-2"><div class="panel"><div class="eyebrow">Reflection desk</div><h2>My study notes</h2><p>Write connections, questions, or a mini-summary. Notes stay in this browser.</p><textarea id="notes" class="notes" placeholder="Example: The Sekai worlds reflect the characters' feelings…"></textarea><div class="actions"><button class="btn" id="saveNotes">Save notes</button><button class="btn secondary" id="clearNotes">Clear notes</button></div></div><div class="panel"><div class="eyebrow">Study prompt</div><h2 id="promptTitle">One small step</h2><p id="promptText">Pick one milestone and explain why it matters to the game's identity in two sentences.</p><button class="btn" id="newPrompt">New prompt</button><hr style="border-color:var(--line);border-width:1px 0 0;margin:24px 0"><h3>Suggested routine</h3><p>Explore 3 timeline cards → review 4 flashcards → take the quiz → write one reflection.</p></div></div></section>
+  </main>
+  <footer><div class="shell footer-row"><span>Made as an educational fan project for Project SEKAI learners.</span><button class="text-btn" id="resetAll">Reset saved progress</button></div></footer><div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    /* =========================
+       SEKAI STUDY LAB — DATA
+       ========================= */
+    const milestones = [
+      {date:'2020 · September 30', type:'release', title:'The Japanese version launches', text:'Project SEKAI COLORFUL STAGE! feat. Hatsune Miku begins service in Japan.', detail:'The launch established the central rhythm-game format: original songs, Vocaloid performances, character stories, and five groups connected by mysterious Sekai worlds.'},
+      {date:'2020 · Late year', type:'story', title:'The five groups and their Sekai worlds', text:'The early story introduces Leo/need, MORE MORE JUMP!, Vivid BAD SQUAD, Wonderlands×Showtime, and Nightcord at 25:00.', detail:'Each group has a different emotional starting point and a different version of the world called Sekai. The settings are shaped by feelings and unfinished wishes.'},
+      {date:'2021 · September 30', type:'feature', title:'First anniversary era', text:'The game celebrates a year of service with new songs, cards, stories, and quality-of-life updates.', detail:'Anniversaries in Project SEKAI are more than calendar markers: they act as checkpoints for new content, retrospectives, and fresh goals for each group.'},
+      {date:'2022 · May 20', type:'release', title:'The English global version arrives', text:'The global release makes the game accessible to a wider international audience.', detail:'The English edition is commonly known as Hatsune Miku: Colorful Stage! Localization introduced the characters and rhythm gameplay to new regions while preserving the core format.'},
+      {date:'2022 · September 30', type:'feature', title:'Second anniversary growth', text:'The game enters a larger content era with more songs, stories, costumes, and live features.', detail:'By this stage, the game had developed an ongoing live-service rhythm: regular events, limited cards, unit chapters, challenge content, and seasonal celebrations.'},
+      {date:'2023 · September 30', type:'feature', title:'Third anniversary and refreshed systems', text:'The anniversary period highlights the expanding cast and continued evolution of the game.', detail:'The anniversary era is useful for studying how Project SEKAI balances its original character drama with Vocaloid music culture and a long-running collection game.'},
+      {date:'2024 · Ongoing era', type:'story', title:'Stories continue beyond the introduction', text:'Units face new goals, changing relationships, performances, and personal challenges.', detail:'A key historical idea is that the story is serialized. Characters are not static profiles; event stories gradually revise their relationships, confidence, and artistic ambitions.'},
+      {date:'Today · Study lens', type:'feature', title:'A living music-story platform', text:'Project SEKAI remains a blend of rhythm game, character drama, virtual performance, and collectible live service.', detail:'For revision, remember the four connected layers: music performance, playable rhythm systems, character storytelling, and the symbolic Sekai worlds.'}
+    ];
+    const flashcards = [
+      ['What is the Japanese title often shortened to?','Project SEKAI COLORFUL STAGE! feat. Hatsune Miku','The English release uses the title Hatsune Miku: Colorful Stage!'],
+      ['When did the Japanese version launch?','September 30, 2020','This is the original service launch milestone.'],
+      ['What is a Sekai?','A world shaped by a person or group’s feelings','The plural is Sekai; different groups encounter different versions.'],
+      ['Name the five main groups introduced early in the game.','Leo/need, MORE MORE JUMP!, Vivid BAD SQUAD, Wonderlands×Showtime, and Nightcord at 25:00','Each group has its own music style, conflicts, and Sekai.'],
+      ['What is the main playable format?','A rhythm game built around tapping notes to songs','Story, collection, and live-service systems surround the rhythm gameplay.'],
+      ['Why are event stories historically important?','They gradually develop characters and relationships','The cast changes over time instead of remaining fixed introductions.'],
+      ['When did the English global version launch?','May 20, 2022','The international edition is titled Hatsune Miku: Colorful Stage!'],
+      ['Name four layers of Project SEKAI.','Music, rhythm gameplay, character stories, and Sekai symbolism','These layers work together to create the game’s identity.']
+    ];
+    const concepts = [
+      {kind:'unit', emoji:'🎸', title:'Leo/need', text:'A band shaped by friendship, distance, and the effort to reconnect through music.'},
+      {kind:'unit', emoji:'🌈', title:'MORE MORE JUMP!', text:'An idol unit focused on persistence, hope, and bringing joy to audiences.'},
+      {kind:'unit', emoji:'🔥', title:'Vivid BAD SQUAD', text:'A street-music group chasing a legendary goal while building its own sound.'},
+      {kind:'unit', emoji:'🎪', title:'Wonderlands×Showtime', text:'A theatrical group whose energetic performances hide sincere personal dreams.'},
+      {kind:'unit', emoji:'📱', title:'Nightcord at 25:00', text:'An anonymous online music circle exploring isolation, identity, and connection.'},
+      {kind:'world', emoji:'🌌', title:'Sekai worlds', text:'Symbolic spaces born from feelings. They change as characters understand themselves.'},
+      {kind:'world', emoji:'🎤', title:'Virtual Singers', text:'Hatsune Miku and other Virtual Singers act as guides whose forms can differ between worlds.'},
+      {kind:'system', emoji:'🎼', title:'Rhythm gameplay', text:'Notes, timing, difficulty levels, songs, and practice create the repeatable play loop.'},
+      {kind:'system', emoji:'🃏', title:'Events and cards', text:'Regular events combine story chapters, point rewards, costumes, and collectible character cards.'}
+    ];
+    const questions = [
+      {q:'Which date matches the Japanese launch?', a:['September 30, 2020','May 20, 2022','September 30, 2023','January 1, 2020'], correct:0, why:'September 30, 2020 is the original Japanese service launch.'},
+      {q:'What best describes a Sekai?', a:['A difficulty setting','A world shaped by feelings','A card rarity','A song chart'], correct:1, why:'Sekai are symbolic worlds connected to emotions and wishes.'},
+      {q:'Which is one of the five main groups?', a:['Starlight Parade','Nightcord at 25:00','Crystal Echo','Miku Racing Club'], correct:1, why:'Nightcord at 25:00 is one of the five central groups.'},
+      {q:'What did the global English version add historically?', a:['International access to the game','A new console','A different rhythm engine','A physical album only'], correct:0, why:'The global edition expanded access for international players.'},
+      {q:'Which combination best summarizes Project SEKAI?', a:['Only a visual novel','Music, rhythm, stories, and collection systems','A city-builder','A traditional card game'], correct:1, why:'The game’s identity comes from several connected layers.'}
+    ];
+    const prompts = [
+      ['Compare two groups','How do the emotional starting points of two groups differ?'],
+      ['Timeline connection','Choose one release milestone and explain what it made possible.'],
+      ['Sekai symbolism','What might a character’s Sekai reveal about their feelings?'],
+      ['Live-service history','Why do recurring events help a game’s story keep moving?'],
+      ['Music and identity','Pick a group and describe how its musical identity supports its story.']
+    ];
+
+    /* =========================
+       SEKAI STUDY LAB — STATE
+       ========================= */
+    const saved = JSON.parse(localStorage.getItem('sekaiStudyProgress') || '{}');
+    let timelineSeen = new Set(saved.timelineSeen || []), cardIndex = saved.cardIndex || 0, reviewed = saved.reviewed || 0;
+    let deck = [...flashcards], quizIndex = 0, quizScore = 0, quizAnswered = false;
+    const $ = id => document.getElementById(id);
+    function persist(){ localStorage.setItem('sekaiStudyProgress', JSON.stringify({timelineSeen:[...timelineSeen],cardIndex,reviewed,bestQuiz:saved.bestQuiz||0,notes:$('notes')?.value||''})); updateStats(); }
+    function toast(msg){ const el=$('toast'); el.textContent=msg; el.classList.add('show'); clearTimeout(window.toastTimer); window.toastTimer=setTimeout(()=>el.classList.remove('show'),2600); }
+    function updateStats(){ $('timelineStat').textContent=Math.round(timelineSeen.size/milestones.length*100)+'%'; $('cardStat').textContent=reviewed; $('quizStat').textContent=(saved.bestQuiz||0)+'%'; }
+
+    /* Timeline */
+    function renderTimeline(){
+      const search=$('timelineSearch').value.toLowerCase().trim(), type=$('timelineType').value, list=$('timelineList'); list.innerHTML='';
+      const visible=milestones.filter((m,i)=>(type==='all'||m.type===type)&&(!search||[m.date,m.title,m.text,m.detail].join(' ').toLowerCase().includes(search)));
+      $('timelineEmpty').classList.toggle('hidden',visible.length>0);
+      visible.forEach(m=>{ const original=milestones.indexOf(m); const article=document.createElement('article'); article.className='milestone card'; article.dataset.type=m.type; article.innerHTML=`<div class="milestone-top"><span class="date">${m.date}</span><span class="tag">${m.type}</span></div><h3>${m.title}</h3><p>${m.text}</p><button class="text-btn detailBtn" aria-expanded="false">Show study note +</button><div class="detail">${m.detail}</div>`; article.querySelector('.detailBtn').addEventListener('click',e=>{ const open=article.classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded',open); e.currentTarget.textContent=open?'Hide study note −':'Show study note +'; timelineSeen.add(original); persist(); }); list.appendChild(article); });
+    }
+    $('timelineSearch').addEventListener('input',renderTimeline); $('timelineType').addEventListener('change',renderTimeline); $('timelineReset').addEventListener('click',()=>{ $('timelineSearch').value=''; $('timelineType').value='all'; renderTimeline(); });
+
+    /* Flashcards */
+    function renderCard(){ const c=deck[cardIndex]; $('cardFront').textContent=c[0]; $('cardBack').textContent=c[1]; $('cardHint').textContent=c[2]; $('cardCounter').textContent=`Card ${cardIndex+1} of ${deck.length}`; $('cardProgress').style.width=((cardIndex+1)/deck.length*100)+'%'; $('flashcard').classList.remove('flipped'); }
+    function flip(){ $('flashcard').classList.toggle('flipped'); reviewed++; persist(); }
+    $('flashcard').addEventListener('click',flip); $('flipCard').addEventListener('click',flip); $('prevCard').addEventListener('click',()=>{cardIndex=(cardIndex-1+deck.length)%deck.length;renderCard();persist();}); $('nextCard').addEventListener('click',()=>{cardIndex=(cardIndex+1)%deck.length;renderCard();persist();}); $('shuffleCards').addEventListener('click',()=>{deck.sort(()=>Math.random()-.5);cardIndex=0;renderCard();toast('Deck shuffled ✦');}); $('flashcard').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip();}});
+
+    /* Quiz */
+    function renderQuiz(){ const q=questions[quizIndex]; quizAnswered=false; $('quizProgress').style.width=((quizIndex)/questions.length*100)+'%'; $('quizScore').textContent=`Score: ${quizScore} / ${quizIndex}`; $('nextQuestion').disabled=true; $('quizArea').innerHTML=`<div class="tag">Question ${quizIndex+1} of ${questions.length}</div><div class="quiz-question">${q.q}</div><div class="answers">${q.a.map((answer,i)=>`<button class="answer" data-answer="${i}">${answer}</button>`).join('')}</div><div id="feedback" class="feedback" aria-live="polite"></div>`; document.querySelectorAll('.answer').forEach(btn=>btn.addEventListener('click',()=>answerQuiz(Number(btn.dataset.answer)))); }
+    function answerQuiz(choice){ if(quizAnswered)return; quizAnswered=true; const q=questions[quizIndex], buttons=document.querySelectorAll('.answer'); buttons.forEach((b,i)=>{b.disabled=true;if(i===q.correct)b.classList.add('correct');if(i===choice&&choice!==q.correct)b.classList.add('wrong');}); const good=choice===q.correct;if(good)quizScore++; const feedback=$('feedback'); feedback.textContent=(good?'Correct! ':'Not quite. ')+q.why; feedback.className='feedback '+(good?'good':'bad'); $('quizScore').textContent=`Score: ${quizScore} / ${quizIndex+1}`; $('nextQuestion').disabled=false; if(quizIndex===questions.length-1){const percent=Math.round(quizScore/questions.length*100);saved.bestQuiz=Math.max(saved.bestQuiz||0,percent);persist();toast(`Quiz complete: ${percent}%`);} }
+    $('nextQuestion').addEventListener('click',()=>{if(quizIndex<questions.length-1){quizIndex++;renderQuiz();}else{quizIndex=0;quizScore=0;renderQuiz();}}); $('resetQuiz').addEventListener('click',()=>{quizIndex=0;quizScore=0;renderQuiz();});
+
+    /* Concepts, notes, prompts, reset */
+    function renderConcepts(kind='all'){ $('conceptGrid').innerHTML=''; concepts.filter(c=>kind==='all'||c.kind===kind).forEach(c=>{const el=document.createElement('article');el.className='concept';el.innerHTML=`<div class="emoji" aria-hidden="true">${c.emoji}</div><span class="tag">${c.kind}</span><h3>${c.title}</h3><p>${c.text}</p>`;$('conceptGrid').appendChild(el);}); }
+    document.querySelectorAll('[data-concept]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-concept]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderConcepts(btn.dataset.concept);}));
+    const storedNotes=saved.notes||''; $('notes').value=storedNotes; $('saveNotes').addEventListener('click',()=>{persist();toast('Notes saved in this browser ✦');}); $('clearNotes').addEventListener('click',()=>{$('notes').value='';persist();toast('Notes cleared');});
+    function newPrompt(){const p=prompts[Math.floor(Math.random()*prompts.length)];$('promptTitle').textContent=p[0];$('promptText').textContent=p[1];} $('newPrompt').addEventListener('click',newPrompt); $('dailyBtn').addEventListener('click',()=>{newPrompt();document.querySelector('#promptTitle').scrollIntoView({behavior:'smooth',block:'center'});toast('A new study prompt is ready ✦');});
+    $('resetAll').addEventListener('click',()=>{if(confirm('Reset all saved study progress and notes?')){localStorage.removeItem('sekaiStudyProgress');location.reload();}});
+
+    /* Start */
+    renderTimeline(); renderCard(); renderQuiz(); renderConcepts(); updateStats();
+  </script>
+</body>
+</html>
